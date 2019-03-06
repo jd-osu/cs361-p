@@ -26,7 +26,7 @@ app.get('/get-availability', function(req,res,next){
 			if (rows.length > 0) {
 				sidewalk.id = rows[0]["id"];
 				
-				mysql.pool.query('SELECT id FROM user_sidewalk WHERE sidewalk_id=? AND status="active"'
+				mysql.pool.query('SELECT id FROM user_sidewalk WHERE sidewalk_id=? AND status="active"',
 								[sidewalk.id], function(err, rows2, fields) {
 					if(err){
 						next(err);
