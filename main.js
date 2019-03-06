@@ -9,20 +9,31 @@ app.get('/',function(req,res,next){
 
 app.get('/get-availability', function(req,res,next){
 	req.street_name = "NE Knott St";
-	req.cross_street_1_name = "NE 7th Ave";
-	req.cross_street_2_name = "lol";
+	req.cross_1 = "NE 7th Ave";
+	req.cross_2 = "NE 8th Ave";
 
 	var context = {};
-	mysql.pool.query('SELECT id, name FROM street WHERE name=? OR name=? OR name=?', [req.street_name, req.cross_street_1_name, req.cross_street_2_name], function(err, rows, fields){
+	mysql.pool.query('SELECT id FROM sidewalk WHERE street_name=? AND (((cross_1=?) AND (cross_2=?)) OR ((cross_1=?) AND (cross_2=?)))',
+					[req.street_name, req.cross_1, req.cross_2, req.cross_1, req.cross_2], function(err, rows, fields){
 		if(err){
 			next(err);
 			return;
 		}
 		else {
+			/*
+			var street_id, cross_1_id, cross_2_id;
 			
-			// make sure none are null
+			// make sure all were found
+			if (rows.length >= 3) {
+				
+				//
+				for (i in rows) {
+					if (rows[i]["name"] == req.street_name)
+						street_id = rows[i]["id"];
+				}
+			}
 			console.log("length=",rows.length);
-			
+			*/
 			res.send(JSON.stringify(rows));
 		}
 	})

@@ -53,13 +53,13 @@ CREATE TABLE `user_tbl` (
 
 CREATE TABLE `sidewalk` (
   `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
-  `street_id` smallint(5) UNSIGNED NOT NULL,
-  `cross_street_1` smallint(5) UNSIGNED NOT NULL,
-  `cross_street_2` smallint(5) UNSIGNED NOT NULL,
-  PRIMARY KEY (`street_id`, `cross_street_1`, `cross_street_2`),
-  FOREIGN KEY (`street_id`) REFERENCES `street` (`id`) ON DELETE CASCADE,
-  FOREIGN KEY (`cross_street_1`) REFERENCES `street` (`id`) ON DELETE CASCADE,
-  FOREIGN KEY (`cross_street_2`) REFERENCES `street` (`id`) ON DELETE CASCADE
+  `street_name` varchar(45) NOT NULL,
+  `cross_1` varchar(45) NOT NULL,
+  `cross_2` varchar(45) NOT NULL,
+  PRIMARY KEY (`street_name`, `cross_1`, `cross_2`),
+  FOREIGN KEY (`street_name`) REFERENCES `street` (`name`) ON DELETE CASCADE,
+  FOREIGN KEY (`cross_1`) REFERENCES `street` (`name`) ON DELETE CASCADE,
+  FOREIGN KEY (`cross_2`) REFERENCES `street` (`name`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -93,10 +93,14 @@ INSERT INTO `user_tbl` (`first_name`, `last_name`) VALUES	('John', 'Johnson'),
 															('Jack', 'Jackson'),
 															('Sally', 'Sallyson');
 															
-INSERT INTO `sidewalk` (`street_id`, `cross_street_1`, `cross_street_2`) VALUES	(1, 2, 3),
-																				(4, 5, 6),
-																				(2, 4, 6),
-																				(1, 3, 5);
+INSERT INTO `sidewalk` (`street_name`, `cross_1`, `cross_2`) VALUES	('NE Knott St', 'NE 7th Ave', 'NE 8th Ave'),
+																('NE Knott St', 'NE 8th Ave', 'NE 9th Ave'),
+																('NE Knott St', 'NE 9th Ave', 'NE 10th Ave'),
+																('NE Knott St', 'NE 10th Ave', 'NE 10th Ave'),
+																('NE Knott St', 'NE 10th Ave', 'NE 12th Ave'),
+																('NE Knott St', 'NE 12th Ave', 'NE 13th Ave'),
+																('NE Knott St', 'NE 13th Ave', 'NE 14th Ave'),
+																('NE Knott St', 'NE 14th Ave', 'NE 15th Ave');
 
 LOCK TABLES `user_sidewalk` WRITE;
 INSERT INTO `user_sidewalk` VALUES (1, 2, 3, '2019-01-02', 'Dirty', 'The Alley'),(2, 1, 2, '2019-02-03', 'Messy', 'The Hideyhole'),(3, 3, 1, '2019-03-04', 'Clean', 'Fancy Pants');
