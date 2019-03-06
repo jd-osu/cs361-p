@@ -7,13 +7,37 @@ app.get('/',function(req,res,next){
 	res.send('test');
 });
 
-app.get('/get-availability', function(req,res,next){
-	req.street_name = "NE Knott St";
-	req.cross_1 = "NE 7th Ave";
-	req.cross_2 = "NE 8th Ave";
-	//req.cross_2 = "lol";
 
-	var context = {};
+/*
+* This function is expecting a GET request submitted to "/get-availability".
+* Pre-Conditions:
+	GET request arguments:	street_name (string) 	Name of the street the sidewalk is ON
+							cross_1 (string)		Name of the first cross street bounding the sidewalk
+							cross_2 (string)		Name of the second cross street bounding the sidewalk
+							
+							-The three names MUST correspond to names of existing "streets" in the database.
+							-The street_name MUST correspond to a street_name for an existing sidewalk,
+								and the two cross street names must correspond to cross streets for the sidewalk, although
+								the order of the two cross streets does not matter.
+								(In other words, the sidewalk must exist in the database)
+								
+  Post-Conditions:
+		Returns sidewalk (object) with the following attributes
+			found (bool)		Indicates whether the sidewalk was found in the database
+			id (int)			ID of the sidewalk
+			available (bool)	Indicates whether the sidewalk is available
+*
+*
+*/
+app.get('/get-availability', function(req,res,next){
+//	req.street_name = "NE Knott St";  //sidewalkID= 1, abandoned
+//	req.cross_1 = "NE 7th Ave";
+//	req.cross_2 = "NE 8th Ave";
+	
+	req.street_name = "NE Knott St";  //sidewalkID= 2, active
+	req.cross_1 = "NE 8th Ave";
+	req.cross_2 = "NE 9th Ave";
+
 	mysql.pool.query('SELECT id FROM sidewalk WHERE street_name=? AND (((cross_1=?) AND (cross_2=?)) OR ((cross_1=?) AND (cross_2=?)))',
 					[req.street_name, req.cross_1, req.cross_2, req.cross_1, req.cross_2], function(err, rows, fields){
 		if(err){
@@ -23,6 +47,7 @@ app.get('/get-availability', function(req,res,next){
 		else {
 			var sidewalk = {};
 			
+			// if a sidewalk object is found
 			if (rows.length > 0) {
 				sidewalk.id = rows[0]["id"];
 				
@@ -43,7 +68,7 @@ app.get('/get-availability', function(req,res,next){
 				})
 			}
 			else {
-				sidewalk.available = false;
+				sidewalk.found = false;
 				res.send(JSON.stringify(sidewalk));
 			}
 		}
@@ -51,6 +76,45 @@ app.get('/get-availability', function(req,res,next){
 });
 
 
+
+/*
+* This function is expecting a GET request submitted to "/get-availability".
+* Pre-Conditions:
+	GET request arguments:	street_name (string) 	Name of the street the sidewalk is ON
+							cross_1 (string)		Name of the first cross street bounding the sidewalk
+							cross_2 (string)		Name of the second cross street bounding the sidewalk
+							
+							-The three names MUST correspond to names of existing "streets" in the database.
+							-The street_name MUST correspond to a street_name for an existing sidewalk,
+								and the two cross street names must correspond to cross streets for the sidewalk, although
+								the order of the two cross streets does not matter.
+								(In other words, the sidewalk must exist in the database)
+								
+  Post-Conditions:
+		Returns sidewalk (object) with the following attributes
+			found (bool)		Indicates whether the sidewalk was found in the database
+			id (int)			ID of the sidewalk
+			available (bool)	Indicates whether the sidewalk is available
+*
+*
+*/
+app.get('/adopt-sidewalk', function(req,res,next){
+	req.user_id = 1;
+	req.sidewalk_id = 1;
+	req.nickname = "Nickname";
+	
+	var today = new Date();
+
+	mysql.pool.query('INSERT INTO user_sidewalk (user_id, sidewalk_id, adoption_date, status, nickname) VALUES (?, ?, ?, "active", ?)',
+					[req.user_id, req.sidewalk_id, today, req.nickname], function(err, rows, fields){
+		if(err){
+			next(err);
+			return;
+		}
+		else
+			res.send("Adoption successful!");
+	})
+});
 
 
 
