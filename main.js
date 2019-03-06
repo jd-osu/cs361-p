@@ -11,8 +11,8 @@ var res = {
   }
 };
 
-function get_street_id(name, mysql) {
-	mysql.pool.query('SELECT id FROM street WHERE name=?', name, function(err, rows, fields){
+function get_street_id(req, res) {
+	mysql.pool.query('SELECT id FROM street WHERE name=?', req.name, function(err, rows, fields){
 		if(err){
 			next(err);
 			return;
@@ -23,8 +23,4 @@ function get_street_id(name, mysql) {
 }
 
 
-//get_street_id(street_name, mysql);
-
-console.log(req);
-
-res.send("\ntest");
+get_street_id(req, res);
