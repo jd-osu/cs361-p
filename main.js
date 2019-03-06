@@ -10,7 +10,8 @@ app.get('/',function(req,res,next){
 app.get('/get-availability', function(req,res,next){
 	req.street_name = "NE Knott St";
 	req.cross_1 = "NE 7th Ave";
-	req.cross_2 = "NE 8th Ave";
+	//req.cross_2 = "NE 8th Ave";
+	req.cross_2 = "lol";
 
 	var context = {};
 	mysql.pool.query('SELECT id FROM sidewalk WHERE street_name=? AND (((cross_1=?) AND (cross_2=?)) OR ((cross_1=?) AND (cross_2=?)))',
