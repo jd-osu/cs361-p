@@ -11,7 +11,7 @@ var res = {
   }
 };
 
-var next = function(err){console.log("error:\n", err};
+var next = function(err){console.log("error:\n", err)};
 
 
 function get_street_id(req, res, next) {
