@@ -10,8 +10,8 @@ app.get('/',function(req,res,next){
 app.get('/get-availability', function(req,res,next){
 	req.street_name = "NE Knott St";
 	req.cross_1 = "NE 7th Ave";
-	//req.cross_2 = "NE 8th Ave";
-	req.cross_2 = "lol";
+	req.cross_2 = "NE 8th Ave";
+	//req.cross_2 = "lol";
 
 	var context = {};
 	mysql.pool.query('SELECT id FROM sidewalk WHERE street_name=? AND (((cross_1=?) AND (cross_2=?)) OR ((cross_1=?) AND (cross_2=?)))',
@@ -21,6 +21,10 @@ app.get('/get-availability', function(req,res,next){
 			return;
 		}
 		else {
+			var sidewalk = {};
+//			if (rows.length > 0) {
+//				sidewalk.id = rows[
+//			}
 			/*
 			var street_id, cross_1_id, cross_2_id;
 			
@@ -34,12 +38,8 @@ app.get('/get-availability', function(req,res,next){
 				}
 			}
 			*/
-			console.log("length=",rows.length,"\n");
-			console.log("rows=",rows,"\n");
-			console.log(rows==undefined,"\n");
-			console.log(rows==[],"\n");
-			
-			res.send(JSON.stringify(rows)==[]);
+
+			res.send(JSON.stringify(rows));
 		}
 	})
 });
