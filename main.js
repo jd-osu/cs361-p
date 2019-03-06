@@ -15,6 +15,6 @@ function get_street_id(name, mysql) {
 	});
 }
 
-var result = get_street_id(name,mysql);
+var result = get_street_id(street_name,mysql);
 
 console.log(JSON.stringify(result));
