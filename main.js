@@ -33,8 +33,12 @@ app.get('/get-availability', function(req,res,next){
 						street_id = rows[i]["id"];
 				}
 			}
-			console.log("length=",rows.length);
 			*/
+			console.log("length=",rows.length,"\n");
+			console.log("rows=",rows,"\n");
+			console.log(rows==undefined,"\n");
+			console.log(rows==[],"\n");
+			
 			res.send(JSON.stringify(rows)==[]);
 		}
 	})
