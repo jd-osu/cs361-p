@@ -35,7 +35,7 @@ app.get('/get-availability', function(req,res,next){
 			}
 			console.log("length=",rows.length);
 			*/
-			res.send(JSON.stringify(rows));
+			res.send(JSON.stringify(rows)==undefined);
 		}
 	})
 });
