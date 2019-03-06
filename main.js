@@ -12,7 +12,7 @@ var res = {
 };
 
 function get_street_id(req, res) {
-	mysql.pool.query('SELECT id FROM street WHERE name=?', [req.name], function(err, rows, fields){
+	mysql.pool.query('SELECT id FROM street WHERE name=?', [req.street_name], function(err, rows, fields){
 		if(err){
 			next(err);
 			return;
