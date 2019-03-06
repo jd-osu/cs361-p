@@ -21,7 +21,7 @@ app.get('/get-availability', function(req,res,next){
 		else {
 			
 			// make sure none are null
-			
+			console.log("length=",rows.length);
 			
 			res.send(JSON.stringify(rows));
 		}
