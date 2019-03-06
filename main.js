@@ -22,24 +22,30 @@ app.get('/get-availability', function(req,res,next){
 		}
 		else {
 			var sidewalk = {};
-//			if (rows.length > 0) {
-//				sidewalk.id = rows[
-//			}
-			/*
-			var street_id, cross_1_id, cross_2_id;
 			
-			// make sure all were found
-			if (rows.length >= 3) {
+			if (rows.length > 0) {
+				sidewalk.id = rows[0]["id"];
 				
-				//
-				for (i in rows) {
-					if (rows[i]["name"] == req.street_name)
-						street_id = rows[i]["id"];
-				}
+				mysql.pool.query('SELECT id FROM user_sidewalk WHERE sidewalk_id=? AND status="active"'
+								[sidewalk.id], function(err, rows2, fields) {
+					if(err){
+						next(err);
+						return;
+					}
+					else {
+						if (rows2 == 0)
+							sidewalk.available = true;
+						else
+							sidewalk.available = false;
+						
+						res.send(JSON.stringify(sidewalk));
+					}
+				})
 			}
-			*/
-
-			res.send(JSON.stringify(rows));
+			else {
+				sidewalk.available = false;
+				res.send(JSON.stringify(sidewalk));
+			}
 		}
 	})
 });

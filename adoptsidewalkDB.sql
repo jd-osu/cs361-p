@@ -103,7 +103,7 @@ INSERT INTO `sidewalk` (`street_name`, `cross_1`, `cross_2`) VALUES	('NE Knott S
 																('NE Knott St', 'NE 14th Ave', 'NE 15th Ave');
 
 LOCK TABLES `user_sidewalk` WRITE;
-INSERT INTO `user_sidewalk` VALUES (1, 2, 3, '2019-01-02', 'Dirty', 'The Alley'),(2, 1, 2, '2019-02-03', 'Messy', 'The Hideyhole'),(3, 3, 1, '2019-03-04', 'Clean', 'Fancy Pants');
+INSERT INTO `user_sidewalk` VALUES (1, 2, 3, '2019-01-02', 'active', 'The Alley'),(2, 1, 2, '2019-02-03', 'active', 'The Hideyhole'),(3, 3, 1, '2019-03-04', 'abandoned', 'Fancy Pants');
 UNLOCK TABLES;
 
 
