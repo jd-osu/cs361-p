@@ -8,6 +8,10 @@ app.get('/',function(req,res,next){
 });
 
 app.get('/get-availability', function(req,res,next){
+	req.street_name = "NE Knott St";
+	req.cross_street_1_name = "NE 7th Ave";
+	req.cross_street_2_name = "NE 8th Ave";
+
 	var context = {};
 	mysql.pool.query('SELECT id, name FROM street WHERE name=? OR name=? OR name=?', [req.street_name, req.cross_street_1_name, req.cross_street_2_name], function(err, rows, fields){
 		if(err){
