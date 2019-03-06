@@ -15,3 +15,5 @@ mysql.pool.query('SELECT id FROM street WHERE name=?', street_name, function(err
 });
 
 console.log("\ntest");
+
+return;
