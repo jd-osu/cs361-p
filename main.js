@@ -7,6 +7,24 @@ app.get('/',function(req,res,next){
 	res.send('test');
 });
 
+app.get('/get-availability', function(req,res,next){
+	var context = {};
+	mysql.pool.query('SELECT id, name FROM street WHERE name=? OR name=? OR name=?', [req.street_name, req.cross_street_1_name, req.cross_street_2_name], function(err, rows, fields){
+		if(err){
+			next(err);
+			return;
+		}
+		else
+			res.send(JSON.stringify(rows));
+	})
+});
+
+
+
+
+
+
+
 app.use(function(req,res){
 	res.status(404);
 	res.render('404');
