@@ -5,9 +5,10 @@ req.street_name = "NE 7th Ave";
 req.cross_street_1_name = "cross street 1";
 req.cross_street_2_name = "cross street 2";
 
-var res = {};
-res.send(input) = function {
-	console.log(input);
+var res = {
+  send : function(input) {
+    console.log(input);
+  }
 };
 
 function get_street_id(name, mysql) {
