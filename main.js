@@ -30,14 +30,6 @@ app.get('/',function(req,res,next){
 *
 */
 app.get('/get-availability', function(req,res,next){
-//	req.street_name = "NE Knott St";  //sidewalkID= 1, abandoned
-//	req.cross_1 = "NE 7th Ave";
-//	req.cross_2 = "NE 8th Ave";
-	
-	req.street_name = "NE Knott St";  //sidewalkID= 2, active
-	req.cross_1 = "NE 8th Ave";
-	req.cross_2 = "NE 9th Ave";
-
 	mysql.pool.query('SELECT id FROM sidewalk WHERE street_name=? AND (((cross_1=?) AND (cross_2=?)) OR ((cross_1=?) AND (cross_2=?)))',
 					[req.street_name, req.cross_1, req.cross_2, req.cross_1, req.cross_2], function(err, rows, fields){
 		if(err){
