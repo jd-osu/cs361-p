@@ -30,6 +30,8 @@ app.get('/',function(req,res,next){
 *
 */
 app.get('/get-availability', function(req,res,next){
+	console.log(req);
+	
 	mysql.pool.query('SELECT id FROM sidewalk WHERE street_name=? AND (((cross_1=?) AND (cross_2=?)) OR ((cross_1=?) AND (cross_2=?)))',
 					[req.street_name, req.cross_1, req.cross_2, req.cross_1, req.cross_2], function(err, rows, fields){
 		if(err){
