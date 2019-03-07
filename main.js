@@ -30,10 +30,8 @@ app.get('/',function(req,res,next){
 *
 */
 app.get('/get-availability', function(req,res,next){
-	console.log(req);
-	
 	mysql.pool.query('SELECT id FROM sidewalk WHERE street_name=? AND (((cross_1=?) AND (cross_2=?)) OR ((cross_1=?) AND (cross_2=?)))',
-					[req.street_name, req.cross_1, req.cross_2, req.cross_1, req.cross_2], function(err, rows, fields){
+					[req.query.street_name, req.query.cross_1, req.query.cross_2, req.query.cross_1, req.query.cross_2], function(err, rows, fields){
 		if(err){
 			next(err);
 			return;
@@ -93,14 +91,14 @@ app.get('/get-availability', function(req,res,next){
 *
 */
 app.get('/adopt-sidewalk', function(req,res,next){
-	req.user_id = 1;
-	req.sidewalk_id = 1;
-	req.nickname = "Nickname";
+	req.query.user_id = 1;
+	req.query.sidewalk_id = 1;
+	req.query.nickname = "Nickname";
 	
 	var today = new Date();
 
 	mysql.pool.query('INSERT INTO user_sidewalk (user_id, sidewalk_id, adoption_date, status, nickname) VALUES (?, ?, ?, "active", ?)',
-					[req.user_id, req.sidewalk_id, today, req.nickname], function(err, rows, fields){
+					[req.query.user_id, req.query.sidewalk_id, today, req.query.nickname], function(err, rows, fields){
 		if(err){
 			next(err);
 			return;
