@@ -70,31 +70,22 @@ app.get('/get-availability', function(req,res,next){
 
 
 /*
-* This function is expecting a GET request submitted to "/get-availability".
+* This function is expecting a GET request submitted to "/adopt-sidewalk".
 * Pre-Conditions:
-	GET request arguments:	street_name (string) 	Name of the street the sidewalk is ON
-							cross_1 (string)		Name of the first cross street bounding the sidewalk
-							cross_2 (string)		Name of the second cross street bounding the sidewalk
+	GET request arguments:	user_id (int) 	
+							sidewalk_id (int)
+							nickname (string)		Nickname that user wants to assign to sidwalk
 							
-							-The three names MUST correspond to names of existing "streets" in the database.
-							-The street_name MUST correspond to a street_name for an existing sidewalk,
-								and the two cross street names must correspond to cross streets for the sidewalk, although
-								the order of the two cross streets does not matter.
-								(In other words, the sidewalk must exist in the database)
+							-The sidewalk MUST be available
+							-The nickname MUST be a string (but can be the empty string "")
 								
   Post-Conditions:
-		Returns sidewalk (object) with the following attributes
-			found (bool)		Indicates whether the sidewalk was found in the database
-			id (int)			ID of the sidewalk
-			available (bool)	Indicates whether the sidewalk is available
+		-Adoption record added to user-sidewalk table with today's date and "active" status
+		-Request message sent back saying "Adoption Successful!"
 *
 *
 */
 app.get('/adopt-sidewalk', function(req,res,next){
-	req.query.user_id = 1;
-	req.query.sidewalk_id = 1;
-	req.query.nickname = "Nickname";
-	
 	var today = new Date();
 
 	mysql.pool.query('INSERT INTO user_sidewalk (user_id, sidewalk_id, adoption_date, status, nickname) VALUES (?, ?, ?, "active", ?)',
@@ -127,92 +118,4 @@ app.use(function(err, req, res, next){
 app.listen(app.get('port'), function(){
 	console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
-
-/*
-var req = {};
-req.street_name = "NE Knott St";
-req.cross_street_1_name = "NE 7th Ave";
-req.cross_street_2_name = "NE 8th Ave";
-
-var res = {
-  send : function(input) {
-    console.log(input);
-  }
-};
-
-var next = function(err){console.log("error:\n", err)};
-*/
-
-
-/*
-
-function get_street_id(req, res, next) {
-	mysql.pool.query('SELECT id FROM street WHERE name=?', [req.street_name], function(err, rows, fields){
-		if(err){
-			next(err);
-			return;
-		}
-		else		
-			res.send(JSON.stringify(rows));
-	});
-}
-
-function get_sidewalk(req, res, next) {
-	mysql.pool.query('SELECT id, name FROM street WHERE name=? OR name=? OR name=?', [req.street_name, req.cross_street_1_name, req.cross_street_2_name], function(err, rows, fields){
-		if(err){
-			next(err);
-			return;
-		}
-		else
-			wait = 0;
-		
-	while (wait == 1);
-	
-	
-	
-	
-			
-			res.send(JSON.stringify(rows));
-	});
-	
-	
-}
-
-function get_streets(street_name, cross_1, cross_2) {
-	mysql.pool.query('SELECT id, name FROM street WHERE name=? OR name=? OR name=?', [street_name, cross_1, cross_2], function(err, rows, fields){
-		if(err){
-			next(err);
-			return;
-		}
-		else
-			return rows;
-	});
-}
-
-function get_availability(req, res, next) {
-	mysql.pool.query('SELECT id, name FROM street WHERE name=? OR name=? OR name=?', [req.street_name, req.cross_street_1_name, req.cross_street_2_name], function(err, rows, fields){
-		if(err){
-			next(err);
-			return;
-		}
-		else
-			wait = 0;
-		
-	while (wait == 1);
-	
-	
-	
-	
-			
-			res.send(JSON.stringify(rows));
-	});
-	
-	
-}
-
-
-
-//get_street_id(req, res);
-get_availability(req, res);
-*/
 
