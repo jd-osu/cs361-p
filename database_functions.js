@@ -149,7 +149,7 @@ app.post('/auth', function(req, res, next) {
 				if (results.length > 0) {
 					req.session.loggedin = true;
 					req.session.username = username;
-					res.redirect('/');
+					res.sent('Login successful!');
 				} else {
 					res.send('Incorrect Username and/or Password!');
 				}			
