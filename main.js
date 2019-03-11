@@ -159,9 +159,7 @@ app.get('/submit-reg', function(req,res,next){
 app.post('/auth', function(req, res, next) {
 	var username = req.body.username;
 	var password = req.body.password;
-	
-	console.log(req);
-	
+
 	console.log("username=",username);
 	console.log("password=",password);
 	
@@ -172,7 +170,7 @@ app.post('/auth', function(req, res, next) {
 				return;
 			}
 			else {
-				if (results.length > 0) {
+				if (rows.length > 0) {
 					req.session.loggedin = true;
 					req.session.username = username;
 					res.sent('Login successful!');
