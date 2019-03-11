@@ -166,7 +166,7 @@ app.post('/auth', function(req, res, next) {
 	console.log("password=",password);
 	
 	if (username && password) {
-		connection.query('SELECT * FROM user_tbl WHERE username = ? AND password = ?', [username, password], function(err, rows, fields) {
+		mysql.pool.query('SELECT * FROM user_tbl WHERE username = ? AND password = ?', [username, password], function(err, rows, fields) {
 			if(err){
 				next(err);
 				return;
