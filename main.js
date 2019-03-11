@@ -117,30 +117,46 @@ app.get('/adopt-sidewalk', function(req,res,next){
 });
 
 /*
-* This function is expecting a GET request submitted to "/adopt-sidewalk".
+* This function is expecting a GET request submitted to "/submit-reg".
 * Pre-Conditions:
-	GET request arguments:	user_id (int) 	
-							sidewalk_id (int)
-							nickname (string)		Nickname that user wants to assign to sidwalk
+	GET request arguments:	username (string) 	
+							password (string)
+							email (string)
+							metro (string)
+							first_name (string) -- OPTIONAL
+							last_name (string) -- OPTIONAL
 							
-							-The sidewalk MUST be available
-							-The nickname MUST be a string (but can be the empty string "")
-								
   Post-Conditions:
-		-Adoption record added to user-sidewalk table with today's date and "active" status
-		-Request message sent back saying "Adoption Successful!"
+		-If username is available, new account is created and success message returned.
+		-If username not available, error message returned.
 *
 *
 */
 app.get('/submit-reg', function(req,res,next){
-	mysql.pool.query('INSERT INTO user_tbl (user_id, sidewalk_id, adoption_date, status, nickname) VALUES (?, ?, ?, "active", ?)',
-					[req.query.user_id, req.query.sidewalk_id, today, req.query.nickname], function(err, rows, fields){
+	mysql.pool.query('SELECT id FROM user_tbl WHERE username=?', [req.query.username], function(err, rows, fields){
 		if(err){
 			next(err);
 			return;
 		}
-		else
-			res.send("User added!");
+		else {
+			// if username is available
+			if (rows.length == 0) {
+				mysql.pool.query('INSERT INTO user_tbl (username, password, email, metro, first_name, last_name) VALUES (?, ?, ?, ?, ?, ?)',
+					[req.query.username, req.query.password, req.query.email, req.query.metro, req.query.first_name, req.query.last_name], function(err, rows2, fields) {
+					if(err){
+						next(err);
+						return;
+					}
+					else {
+						res.send("Account successfully created!");
+					}
+				})
+			}
+			//if username is already taken
+			else {
+				res.send("username already in use!");
+			}
+		}
 	})
 });
 

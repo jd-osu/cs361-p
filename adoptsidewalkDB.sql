@@ -45,7 +45,7 @@ CREATE TABLE `user_tbl` (
   `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` varchar(45),
   `last_name` varchar(45),
-  `username` varchar(50) NOT NULL,
+  `username` varchar(50) NOT NULL UNIQUE,
   `password` varchar(255) NOT NULL,
   `email` varchar(100) NOT NULL,
   `metro` varchar(100) NOT NULL,
