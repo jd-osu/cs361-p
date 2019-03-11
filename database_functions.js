@@ -1,8 +1,35 @@
 
-/* These function assume that at least the following declarations have been made by server-side script:
+/* This is the server-side script that I'm using, commented for your reference:
 var mysql = require('./dbcon.js');
 var express = require('express');
 var app = express();
+
+var mysql = require('./dbcon.js');
+var express = require('express');
+var session = require('express-session');
+var bodyParser = require('body-parser');
+
+var app = express();
+
+var handlebars = require('express-handlebars').create({defaultLayout:'main'});
+
+app.engine('handlebars', handlebars.engine);
+app.use(bodyParser.urlencoded({extended:true}));
+
+app.set('port', 9436);
+
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.json());
+
+app.get('/',function(req,res,next){
+	res.send('test');
+});
+
 */
 
 /*
@@ -97,30 +124,46 @@ app.get('/adopt-sidewalk', function(req,res,next){
 });
 
 /*
-* This function is expecting a GET request submitted to "/adopt-sidewalk".
+* This function is expecting a GET request submitted to "/submit-reg".
 * Pre-Conditions:
-	GET request arguments:	user_id (int) 	
-							sidewalk_id (int)
-							nickname (string)		Nickname that user wants to assign to sidwalk
+	GET request arguments:	username (string) 	
+							password (string)
+							email (string)
+							metro (string)
+							first_name (string) -- OPTIONAL
+							last_name (string) -- OPTIONAL
 							
-							-The sidewalk MUST be available
-							-The nickname MUST be a string (but can be the empty string "")
-								
   Post-Conditions:
-		-Adoption record added to user-sidewalk table with today's date and "active" status
-		-Request message sent back saying "Adoption Successful!"
+		-If username is available, new account is created and success message returned.
+		-If username not available, error message returned.
 *
 *
 */
 app.get('/submit-reg', function(req,res,next){
-	mysql.pool.query('INSERT INTO user_tbl (user_id, sidewalk_id, adoption_date, status, nickname) VALUES (?, ?, ?, "active", ?)',
-					[req.query.user_id, req.query.sidewalk_id, today, req.query.nickname], function(err, rows, fields){
+	mysql.pool.query('SELECT id FROM user_tbl WHERE username=?', [req.query.username], function(err, rows, fields){
 		if(err){
 			next(err);
 			return;
 		}
-		else
-			res.send("User added!");
+		else {
+			// if username is available
+			if (rows.length == 0) {
+				mysql.pool.query('INSERT INTO user_tbl (username, password, email, metro, first_name, last_name) VALUES (?, ?, ?, ?, ?, ?)',
+					[req.query.username, req.query.password, req.query.email, req.query.metro, req.query.first_name, req.query.last_name], function(err, rows2, fields) {
+					if(err){
+						next(err);
+						return;
+					}
+					else {
+						res.send("Account successfully created!");
+					}
+				})
+			}
+			//if username is already taken
+			else {
+				res.send("username already in use!");
+			}
+		}
 	})
 });
 
@@ -139,17 +182,21 @@ app.get('/submit-reg', function(req,res,next){
 app.post('/auth', function(req, res, next) {
 	var username = req.body.username;
 	var password = req.body.password;
+
+	console.log("username=",username);
+	console.log("password=",password);
+	
 	if (username && password) {
-		connection.query('SELECT * FROM user_tbl WHERE username = ? AND password = ?', [username, password], function(err, rows, fields) {
+		mysql.pool.query('SELECT * FROM user_tbl WHERE username = ? AND password = ?', [username, password], function(err, rows, fields) {
 			if(err){
 				next(err);
 				return;
 			}
 			else {
-				if (results.length > 0) {
+				if (rows.length > 0) {
 					req.session.loggedin = true;
 					req.session.username = username;
-					res.sent('Login successful!');
+					res.send('Login successful!');
 				} else {
 					res.send('Incorrect Username and/or Password!');
 				}			
@@ -161,3 +208,22 @@ app.post('/auth', function(req, res, next) {
 		res.end();
 	}
 });
+
+/* more server-side script commented out for your reference:
+app.use(function(req,res){
+	res.status(404);
+	res.render('404');
+});
+
+app.use(function(err, req, res, next){
+	console.error(err.stack);
+	res.type('plain/text');
+	res.status(500);
+	res.render('500');
+});
+
+app.listen(app.get('port'), function(){
+	console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
+});
+
+*/
