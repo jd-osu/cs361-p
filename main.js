@@ -159,6 +159,10 @@ app.get('/submit-reg', function(req,res,next){
 app.post('/auth', function(req, res, next) {
 	var username = req.body.username;
 	var password = req.body.password;
+	
+	console.log("username=",username);
+	console.log("password=",password);
+	
 	if (username && password) {
 		connection.query('SELECT * FROM user_tbl WHERE username = ? AND password = ?', [username, password], function(err, rows, fields) {
 			if(err){
