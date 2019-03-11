@@ -36,13 +36,21 @@ CREATE TABLE `street` (
 -- --------------------------------------------------------
 --
 -- Table structure for table `user_tbl`
+-- NOTE: The following SQL code was adapted from the example presented in:
+-- https://codeshack.io/basic-login-system-nodejs-express-mysql/
+-- Specifically, the username/password attributes
 --
 
 CREATE TABLE `user_tbl` (
   `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(45) NOT NULL,
-  `last_name` varchar(45) NOT NULL,
+  `first_name` varchar(45),
+  `last_name` varchar(45),
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `metro` varchar(100) NOT NULL,
   `img` varchar(45) DEFAULT NULL,
+  `collaborator` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -78,6 +86,7 @@ CREATE TABLE `user_sidewalk` (
   FOREIGN KEY (`sidewalk_id`) REFERENCES `sidewalk` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
 INSERT INTO `street` (`name`) VALUES	('NE Knott St'),
 										('NE 7th Ave'),
 										('NE 8th Ave'),
@@ -89,10 +98,13 @@ INSERT INTO `street` (`name`) VALUES	('NE Knott St'),
 										('NE 14th Ave'),
 										('NE 15th Ave');
 
-INSERT INTO `user_tbl` (`first_name`, `last_name`) VALUES	('John', 'Johnson'),
-															('Jack', 'Jackson'),
-															('Sally', 'Sallyson');
+INSERT INTO `user_tbl` (`username`, `password`, `email`, `metro`, `first_name`, `last_name`)
+													VALUES	('username1', 'password', 'test1@test.com', 'Portland', 'John', 'Johnson'),
+															('username2', 'password', 'test2@test.com', 'Portland', 'Jack', 'Jackson'),
+															('username3', 'password', 'test3@test.com', 'Portland', 'Sally', 'Sallyson');
 															
+INSERT INTO `user_tbl` (`username`, `password`, `email`, `metro`) VALUES	('username4', 'password', 'test4@test.com', 'Portland');
+
 INSERT INTO `sidewalk` (`street_name`, `cross_1`, `cross_2`) VALUES	('NE Knott St', 'NE 7th Ave', 'NE 8th Ave'),
 																('NE Knott St', 'NE 8th Ave', 'NE 9th Ave'),
 																('NE Knott St', 'NE 9th Ave', 'NE 10th Ave'),
