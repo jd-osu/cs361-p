@@ -1,8 +1,24 @@
 var mysql = require('./dbcon.js');
 var express = require('express');
 var session = require('express-session');
+var bodyParser = require('body-parser');
+
 var app = express();
+
+var handlebars = require('express-handlebars').create({defaultLayout:'main'});
+
+app.engine('handlebars', handlebars.engine);
+app.use(bodyParser.urlencoded({extended:true}));
+
 app.set('port', 9436);
+
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.json());
 
 app.get('/',function(req,res,next){
 	res.send('test');
