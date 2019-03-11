@@ -160,6 +160,8 @@ app.post('/auth', function(req, res, next) {
 	var username = req.body.username;
 	var password = req.body.password;
 	
+	console.log(req);
+	
 	console.log("username=",username);
 	console.log("password=",password);
 	
